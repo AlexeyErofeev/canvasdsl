@@ -18,10 +18,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         rect {
-            roundedCorners {
-                r = 4.dp
-                all = true
-            }
+            roundedCorners { r = 4.dp }
 
             relative {
                 width = 50.vpX
