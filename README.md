@@ -1,6 +1,6 @@
 # CanvasDSL
 
-Simple lightweight kotlin-dsl based implementation of android vector drawable without xml.
+Simple lightweight kotlin-dsl for canvas drawings.
 
 ## Key features
 
