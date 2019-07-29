@@ -1,3 +1,5 @@
+[![](https://jitpack.io/v/AlexeyErofeev/canvasdsl.svg)](https://jitpack.io/#AlexeyErofeev/canvasdsl)
+
 # CanvasDSL
 
 Simple lightweight kotlin-dsl for canvas drawings.
@@ -36,14 +38,14 @@ Add the dependency:
 ```groovy
 
 	dependencies {
-	        implementation 'com.github.AlexeyErofeev:canvasdsl:$canvasdsl_version'
+	        implementation 'com.github.AlexeyErofeev:canvasdsl:1.0-alpha'
 	}
 ```
 
 ## Roadmap
 
-1. Examples
-2. Documentation
+1. Examples (have a minimal one, need much more)
+2. Documentation 
 3. VectorDrawable loader (separate dependency)  
 4. Tests
 5. Nested drawable 
