@@ -21,7 +21,7 @@ Simple lightweight kotlin-dsl for canvas drawings.
 * Bitmap decoration
 * Correctly painted gradient
 
-#Usage
+## Usage
 
 Add it in your root build.gradle at the end of repositories:
 
