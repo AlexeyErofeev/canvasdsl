@@ -19,14 +19,33 @@ Simple lightweight kotlin-dsl for canvas drawings.
 * Bitmap decoration
 * Correctly painted gradient
 
+#Usage
+
+Add it in your root build.gradle at the end of repositories:
+
+```groovy
+	allprojects {
+		repositories {
+			//...
+			maven { url 'https://jitpack.io' }
+		}
+	} 
+```
+
+Add the dependency:
+```groovy
+
+	dependencies {
+	        implementation 'com.github.AlexeyErofeev:canvasdsl:$canvasdsl_version'
+	}
+```
 
 ## Roadmap
 
-1. Deploy binary 
-2. Examples
-3. Documentation
-4. VectorDrawable loader (separate dependency)  
-6. Tests
-7. Nested drawable 
-8. More primitives (?)
-9. Interactive elements (click spots)
+1. Examples
+2. Documentation
+3. VectorDrawable loader (separate dependency)  
+4. Tests
+5. Nested drawable 
+6. More primitives (?)
+7. Interactive elements (click spots)
