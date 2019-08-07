@@ -4,8 +4,13 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Rect
 import com.mytoolbox.canvasdsl.common.Node
+import com.mytoolbox.canvasdsl.common.NodeFabric
 import com.mytoolbox.canvasdsl.common.SizeF
 import com.mytoolbox.canvasdsl.common.Viewport
+
+@Suppress("unused")
+fun NodeFabric.text(init: Text.() -> Unit) =
+    initNode(Text(defNode), init)
 
 @Suppress("unused", "MemberVisibilityCanBePrivate")
 class Text(private val defNode: Node) : Node() {

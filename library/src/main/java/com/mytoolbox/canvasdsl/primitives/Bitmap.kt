@@ -5,7 +5,13 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import com.mytoolbox.canvasdsl.common.Node
+import com.mytoolbox.canvasdsl.common.NodeFabric
 import com.mytoolbox.canvasdsl.common.renderDrawable
+
+@Suppress("unused")
+fun NodeFabric.bitmap(init: com.mytoolbox.canvasdsl.primitives.Bitmap.() -> Unit) =
+    initNode(Bitmap(), init)
+
 
 @Suppress("MemberVisibilityCanBePrivate")
 class Bitmap: Node() {

@@ -17,6 +17,7 @@ open class Node {
 
     fun draw(canvas: Canvas) = with(canvas) {
         save()
+
         translate(pos.x, pos.y)
         rotate(angle, pivot.x, pivot.y)
         scale(scale.x, scale.y, pivot.x, pivot.y)
@@ -25,6 +26,7 @@ open class Node {
             clipPath(clipRegion)
 
         drawSelf(canvas)
+
         restore()
     }
 
@@ -33,7 +35,7 @@ open class Node {
         children.forEach { it.initViewport(viewport) }
     }
 
-    open fun drawSelf(canvas: Canvas) {}
+    open fun drawSelf(canvas: Canvas){}
 
     fun paint(init: Paint.() -> Unit): Paint = paint.apply { init() }
 

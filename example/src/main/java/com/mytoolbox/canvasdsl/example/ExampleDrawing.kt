@@ -5,7 +5,9 @@ import android.graphics.Paint
 import com.mytoolbox.canvasdsl.common.color
 import com.mytoolbox.canvasdsl.common.dp
 import com.mytoolbox.canvasdsl.drawing
+import com.mytoolbox.canvasdsl.primitives.rect
 import com.mytoolbox.example.R
+
 
 fun Context.example() = drawing {
     fitToHost = true

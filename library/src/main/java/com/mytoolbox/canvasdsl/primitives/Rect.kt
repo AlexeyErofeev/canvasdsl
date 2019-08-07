@@ -5,8 +5,13 @@ package com.mytoolbox.canvasdsl.primitives
 import android.graphics.Canvas
 import android.graphics.Path
 import com.mytoolbox.canvasdsl.common.Node
+import com.mytoolbox.canvasdsl.common.NodeFabric
 import com.mytoolbox.canvasdsl.common.Viewport
 import com.mytoolbox.canvasdsl.common.newRoundedRect
+
+@Suppress("unused")
+fun NodeFabric.rect(init: Rect.() -> Unit) =
+    initNode(Rect(), init)
 
 @Suppress("unused")
 class Rect : Node() {

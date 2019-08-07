@@ -5,8 +5,12 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.os.Build
-import com.mytoolbox.canvasdsl.Drawing
 import com.mytoolbox.canvasdsl.common.Node
+import com.mytoolbox.canvasdsl.common.NodeFabric
+
+@Suppress("unused")
+fun NodeFabric.drawable(init: com.mytoolbox.canvasdsl.primitives.Drawable.() -> Unit) =
+    initNode(Drawable(), init)
 
 @Suppress("MemberVisibilityCanBePrivate")
 class Drawable : Node() {
@@ -24,6 +28,7 @@ class Drawable : Node() {
         set(resId) {
             this@Drawable.resId = resId
 
+            @Suppress("DEPRECATION")
             drawable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                 resources.getDrawable(resId, theme)
             else
