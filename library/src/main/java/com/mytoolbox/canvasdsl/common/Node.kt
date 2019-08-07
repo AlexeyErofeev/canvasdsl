@@ -3,7 +3,7 @@ package com.mytoolbox.canvasdsl.common
 import android.graphics.*
 
 @Suppress("unused", "MemberVisibilityCanBePrivate")
-open class Node {
+open class Node : ViewportGuest {
     protected var pivot = PointF(0f, 0f)
     protected var pos = PointF(0f, 0f)
     protected var angle = 0f
@@ -30,7 +30,7 @@ open class Node {
         restore()
     }
 
-    open fun initViewport(viewport: Viewport) {
+    override fun initViewport(viewport: Viewport) {
         viewportFun?.invoke(viewport)
         children.forEach { it.initViewport(viewport) }
     }
@@ -67,7 +67,7 @@ open class Node {
         clipRegion = Path().apply { init() }
     }
 
-    fun relative(init: Viewport.() -> Unit) {
+    override fun relative(init: Viewport.() -> Unit) {
         viewportFun = init
     }
 

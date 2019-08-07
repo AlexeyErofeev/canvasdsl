@@ -7,6 +7,11 @@ interface ViewportHost {
     val height: Int
 }
 
+interface ViewportGuest {
+    fun initViewport(viewport: Viewport)
+    fun relative(init: Viewport.() -> Unit)
+}
+
 open class ViewportParams(
         open val width: Float = 1f,
         open val height: Float = 1f,
