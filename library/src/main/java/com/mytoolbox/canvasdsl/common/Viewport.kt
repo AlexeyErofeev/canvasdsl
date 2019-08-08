@@ -5,6 +5,7 @@ package com.mytoolbox.canvasdsl.common
 interface ViewportHost {
     val width: Int
     val height: Int
+    fun viewport(init: DrawingViewport.() -> Unit)
 }
 
 interface ViewportGuest {

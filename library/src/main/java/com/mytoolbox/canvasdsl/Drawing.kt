@@ -53,6 +53,11 @@ class Drawing(override val defNode: Node = Node(), val rootNode: Group = Group(d
         rootNode.paint.colorFilter = colorFilter
     }
 
+    // ViewportHost implementation
+    override fun viewport(init: DrawingViewport.() -> Unit) {
+        drawingViewport.init()
+    }
+
     // Own
     fun define(tag: String = "", init: Def.() -> Unit): Def {
         val def = Def(defNode)
@@ -68,7 +73,5 @@ class Drawing(override val defNode: Node = Node(), val rootNode: Group = Group(d
         filled = true
     }
 
-    fun viewport(init: DrawingViewport.() -> Unit) {
-        drawingViewport.init()
-    }
+
 }
