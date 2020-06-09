@@ -20,7 +20,7 @@ Simple lightweight kotlin-dsl for canvas drawings.
 * Another simple data visualization 
 * Bitmap decoration
 
-#Usage
+## Usage
 
 Add it in your root build.gradle at the end of repositories:
 
