@@ -19,7 +19,6 @@ Simple lightweight kotlin-dsl for canvas drawings.
 * Determinate progress, charge indicators
 * Another simple data visualization 
 * Bitmap decoration
-* Correctly painted gradient
 
 #Usage
 
@@ -41,13 +40,3 @@ Add the dependency:
 	        implementation 'com.github.AlexeyErofeev:canvasdsl:1.0-alpha'
 	}
 ```
-
-## Roadmap
-
-1. Examples (have a minimal one, need much more)
-2. Documentation 
-3. VectorDrawable loader (separate dependency)  
-4. Tests
-5. Nested drawable 
-6. More primitives (?)
-7. Interactive elements (click spots)

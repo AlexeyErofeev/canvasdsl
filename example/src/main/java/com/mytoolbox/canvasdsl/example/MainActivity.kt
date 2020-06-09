@@ -5,7 +5,6 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.mytoolbox.example.R
 
-
 class MainActivity : AppCompatActivity() {
     private val drawing by example()
 
