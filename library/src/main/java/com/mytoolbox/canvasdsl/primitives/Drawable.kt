@@ -10,7 +10,7 @@ import com.mytoolbox.canvasdsl.common.NodeFabric
 
 @Suppress("unused")
 fun NodeFabric.drawable(init: com.mytoolbox.canvasdsl.primitives.Drawable.() -> Unit) =
-    initNode(Drawable(), init)
+    initNode(com.mytoolbox.canvasdsl.primitives.Drawable(), init)
 
 @Suppress("MemberVisibilityCanBePrivate")
 class Drawable : Node() {
