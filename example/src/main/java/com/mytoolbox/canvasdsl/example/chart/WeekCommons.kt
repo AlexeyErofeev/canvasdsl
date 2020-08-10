@@ -33,7 +33,7 @@ fun Group.paintGrayBars(context: Context) = group {
     }
 }
 
-fun formatDayOfWeek(context: Context, date: Date): String = SimpleDateFormat("EE", Locale.ENGLISH).format(date)
+fun formatDayOfWeek(date: Date): String = SimpleDateFormat("EE", Locale.ENGLISH).format(date)
 
 @SuppressLint("DefaultLocale")
 fun Drawing.paintWeek(context: Context, wear: Array<Boolean>) = group {
@@ -70,7 +70,7 @@ fun Drawing.paintWeek(context: Context, wear: Array<Boolean>) = group {
 
         text {
             paint = if (wear[i]) textWY else textWN
-            text = formatDayOfWeek(context, times[6 - i]).capitalize()
+            text = formatDayOfWeek(times[6 - i]).capitalize()
 
             relative {
                 translate(40.vpX * i + 12.vpX - size.width / 2, 8.vpY - size.height / 2)

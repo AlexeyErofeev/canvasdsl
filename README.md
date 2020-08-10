@@ -43,5 +43,5 @@ Add the dependency:
 ```
 
 ## Example
-Included example contains chart bar example (stress level for last completed 7 days)
+Included example contains chart bar for stress level for last completed 7 days, which shows how to use main primitives and measures except "path"
 ![Included example screenshot](https://github.com/AlexeyErofeev/canvasdsl/blob/master/ex1.jpg?raw=true)
