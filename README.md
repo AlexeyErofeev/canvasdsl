@@ -6,10 +6,11 @@ Simple lightweight kotlin-dsl for canvas drawings.
 
 ## Key features
 
+* Inherited from standard drawable
+* Easy to use for value animation
 * SVG-like primitives
 * Supports references to predefined groups 
 * Viewport mechanics with relative "viewport points"
-* Mutable model, ready for animation
 * No compatibility limits - works with minimum android sdk 1
 * One dependency: kotlin stdlib, you should use it anyway for kotlin
 
@@ -40,3 +41,7 @@ Add the dependency:
 	        implementation 'com.github.AlexeyErofeev:canvasdsl:1.0-alpha'
 	}
 ```
+
+## Example
+Included example contains chart bar example (stress level for last completed 7 days)
+![Included example screenshot](https://github.com/AlexeyErofeev/canvasdsl/blob/master/ex1.jpg?raw=true)

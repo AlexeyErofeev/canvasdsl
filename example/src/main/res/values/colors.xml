@@ -4,7 +4,13 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
+    <color name="main_white_00">#00ffffff</color>
     <color name="light_gray_05">#f5f5f5</color>
-    <color name="teal">#009688</color>
     <color name="light_black_87">#de000000</color>
+
+    <color name="normal_level">#8bc34a</color>
+    <color name="high_level">#ffc107</color>
+    <color name="danger_level">#ff5722</color>
+
+    <color name="not_wear_day">#a6a6a6</color>
 </resources>
