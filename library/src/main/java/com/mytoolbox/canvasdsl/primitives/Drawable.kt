@@ -29,9 +29,11 @@ class Drawable : Node() {
             this@Drawable.resId = resId
 
             @Suppress("DEPRECATION")
-            drawable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                resources.getDrawable(resId, theme)
-            else
-                resources.getDrawable(resId)
+            drawable = (
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                        resources.getDrawable(resId, theme) else resources.getDrawable(resId))
+                .apply {
+                    setBounds(0, 0, intrinsicWidth, intrinsicHeight)
+                }
         }
 }
