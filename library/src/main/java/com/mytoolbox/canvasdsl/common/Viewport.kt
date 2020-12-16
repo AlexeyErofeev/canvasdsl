@@ -58,12 +58,15 @@ class DrawingViewport(private val host: ViewportHost) : MutableViewportParams() 
 }
 
 data class Viewport(private val host: ViewportHost, private val vp: ViewportParams) {
-    val vpX: Float get() = (host.width - vp.marginLeft - vp.marginRight) / vp.width
-    val vpY: Float get() = (host.height - vp.marginTop - vp.marginBottom) / vp.height
+    val vpX: Float by lazy { (host.width - vp.marginLeft - vp.marginRight) / vp.width }
+    val vpY: Float by lazy { (host.height - vp.marginTop - vp.marginBottom) / vp.height }
 
     val Int.vpX: Float get() = this * this@Viewport.vpX
     val Int.vpY: Float get() = this * this@Viewport.vpY
 
     val Float.vpX: Float get() = this * this@Viewport.vpX
     val Float.vpY: Float get() = this * this@Viewport.vpY
+
+    val vpWidth: Float get() = vp.width * this@Viewport.vpX
+    val vpHeight: Float get() = vp.height * this@Viewport.vpY
 }
