@@ -16,7 +16,7 @@ import com.mytoolbox.canvasdsl.common.Viewport
  * Tag to draw multiline text.
  *
  * Differences from [text]:
- *  * breaks text in several lines if it doesn't fit
+ *  * breaks text in several lines if it doesn't fit (see [MultiLineText.alignment] for align text)
  *  * support `\n` to break lines
  *  * [Node.paint] could be [TextPaint]
  *  * doesn't support drawing with [Path]
@@ -30,6 +30,7 @@ fun NodeFabric.multiLineText(init: MultiLineText.() -> Unit) =
 class MultiLineText : Node() {
     private var resId = 0
     var text = ""
+    var alignment: Layout.Alignment = Layout.Alignment.ALIGN_NORMAL
     private var width: Int = 0
 
     var size: SizeF = SizeF(-1f, -1f)
@@ -53,12 +54,13 @@ class MultiLineText : Node() {
         val layout = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
             StaticLayout.Builder.obtain(text, 0, text.length, paint, width)
                 .setIncludePad(false)
+                .setAlignment(alignment)
                 .build()
         } else {
             @Suppress("DEPRECATION")
             StaticLayout(
                 text, paint, width,
-                Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false
+                alignment, 1.0f, 0.0f, false
             )
         }
         layout.draw(canvas)
