@@ -19,7 +19,7 @@ val Float.dp: Float get() = this * dpi
 
 fun Context.color(id: Int) = with(resources) {
     @Suppress("DEPRECATION")
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
         getColor(id, theme)
     else
         getColor(id)
