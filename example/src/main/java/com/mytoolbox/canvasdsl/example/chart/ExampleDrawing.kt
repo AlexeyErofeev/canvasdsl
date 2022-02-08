@@ -116,9 +116,9 @@ fun Drawing.paintStressPercents(context: Context, data: Array<DayStress>) = grou
     val graphMedium by context.stressMedium()
     val graphHi by context.stressHi()
 
-    val hi = data.sumBy { it.high }
-    val med = data.sumBy { it.medium }
-    val low = data.sumBy { it.low }
+    val hi = data.sumOf { it.high }
+    val med = data.sumOf { it.medium }
+    val low = data.sumOf { it.low }
 
     relative {
         translate(17.vpX, 0f)

@@ -70,7 +70,9 @@ fun Drawing.paintWeek(context: Context, wear: Array<Boolean>) = group {
 
         text {
             paint = if (wear[i]) textWY else textWN
-            text = formatDayOfWeek(times[6 - i]).capitalize()
+            text = formatDayOfWeek(times[6 - i]).replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+            }
 
             relative {
                 translate(40.vpX * i + 12.vpX - size.width / 2, 8.vpY - size.height / 2)

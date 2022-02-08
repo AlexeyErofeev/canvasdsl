@@ -6,10 +6,10 @@ import com.mytoolbox.canvasdsl.common.Node
 import com.mytoolbox.canvasdsl.common.NodeFabric
 
 @Suppress("unused")
-
 fun NodeFabric.group(init: Group.() -> Unit) =
     initNode(Group(defNode), init)
 
+@Suppress("unused")
 open class Group(override val defNode: Node) : Node(), NodeFabric {
     override fun <T : Node> initNode(node: T, init: T.() -> Unit) {
         node.paint = Paint(paint)

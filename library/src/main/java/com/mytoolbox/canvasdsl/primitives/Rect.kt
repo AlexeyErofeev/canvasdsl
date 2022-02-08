@@ -7,7 +7,7 @@ import android.graphics.Path
 import com.mytoolbox.canvasdsl.common.Node
 import com.mytoolbox.canvasdsl.common.NodeFabric
 import com.mytoolbox.canvasdsl.common.Viewport
-import com.mytoolbox.canvasdsl.common.newRoundedRect
+import com.mytoolbox.canvasdsl.utils.newRoundedRect
 
 @Suppress("unused")
 fun NodeFabric.rect(init: Rect.() -> Unit) =

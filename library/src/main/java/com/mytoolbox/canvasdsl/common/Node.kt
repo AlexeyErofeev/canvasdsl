@@ -1,6 +1,7 @@
 package com.mytoolbox.canvasdsl.common
 
 import android.graphics.*
+import com.mytoolbox.canvasdsl.utils.newRoundedRect
 
 @Suppress("unused", "MemberVisibilityCanBePrivate")
 open class Node : ViewportGuest {
@@ -65,6 +66,10 @@ open class Node : ViewportGuest {
 
     fun clipPath(init: Path.() -> Unit) {
         clipRegion = Path().apply { init() }
+    }
+
+    fun clipPath(path: Path) {
+        clipRegion = path
     }
 
     override fun relative(init: Viewport.() -> Unit) {
