@@ -7,6 +7,15 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.mytoolbox.canvasdsl.example.chart.DayStress
 import com.mytoolbox.canvasdsl.example.chart.stressWeek
 import com.mytoolbox.example.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
+import java.util.Timer
 
 class MainActivity : AppCompatActivity() {
     private val dataStress = arrayOf(
@@ -24,6 +33,19 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
+
+        val flow = MutableStateFlow(true)
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(500)
+            flow.emit(false)
+        }
+
+        installSplashScreen().apply {
+            setKeepOnScreenCondition {
+                return@setKeepOnScreenCondition flow.value
+            }
+        }
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         findViewById<ImageView>(R.id.picture).setImageDrawable(drawing)
