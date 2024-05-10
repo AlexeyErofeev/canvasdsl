@@ -3,7 +3,6 @@ package com.mytoolbox.canvasdsl
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
-import android.os.Build
 import com.mytoolbox.canvasdsl.primitives.Def
 import com.mytoolbox.canvasdsl.primitives.Group
 import com.mytoolbox.canvasdsl.common.*
