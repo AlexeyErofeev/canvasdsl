@@ -8,3 +8,4 @@ classes/
 .DS_Store
 /build
 /captures
+/example/release/example-release.aab

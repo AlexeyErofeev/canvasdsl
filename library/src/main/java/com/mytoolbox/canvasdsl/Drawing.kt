@@ -72,6 +72,4 @@ class Drawing(override val defNode: Node = Node(), val rootNode: Group = Group(d
         rootNode.paint(init)
         filled = true
     }
-
-
 }
