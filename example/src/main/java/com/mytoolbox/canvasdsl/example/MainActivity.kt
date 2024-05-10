@@ -3,6 +3,7 @@ package com.mytoolbox.canvasdsl.example
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.mytoolbox.canvasdsl.example.chart.DayStress
 import com.mytoolbox.canvasdsl.example.chart.stressWeek
 import com.mytoolbox.example.R
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private val drawing by stressWeek(dataStress)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         findViewById<ImageView>(R.id.picture).setImageDrawable(drawing)
