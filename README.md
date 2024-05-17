@@ -38,7 +38,7 @@ Add the dependency:
 ```groovy
 
 	dependencies {
-	        implementation 'com.github.AlexeyErofeev:canvasdsl:1.0.2'
+	        implementation 'com.github.AlexeyErofeev:canvasdsl:1.0.4'
 	}
 ```
 

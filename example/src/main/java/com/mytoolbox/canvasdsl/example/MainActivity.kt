@@ -3,9 +3,15 @@ package com.mytoolbox.canvasdsl.example
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.mytoolbox.canvasdsl.example.chart.DayStress
 import com.mytoolbox.canvasdsl.example.chart.stressWeek
 import com.mytoolbox.example.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private val dataStress = arrayOf(
@@ -22,6 +28,20 @@ class MainActivity : AppCompatActivity() {
     private val drawing by stressWeek(dataStress)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
+
+        val flow = MutableStateFlow(true)
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(500)
+            flow.emit(false)
+        }
+
+        installSplashScreen().apply {
+            setKeepOnScreenCondition {
+                return@setKeepOnScreenCondition flow.value
+            }
+        }
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         findViewById<ImageView>(R.id.picture).setImageDrawable(drawing)

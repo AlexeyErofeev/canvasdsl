@@ -7,7 +7,7 @@ import com.mytoolbox.canvasdsl.primitives.Def
 import com.mytoolbox.canvasdsl.primitives.Group
 import com.mytoolbox.canvasdsl.common.*
 
-@Suppress("unused")
+@Suppress("unused", "UnusedReceiverParameter")
 fun Context.drawing(init: Drawing.() -> Unit): Lazy<Drawing> = lazy { Drawing().apply(init) }
 
 @Suppress("unused", "MemberVisibilityCanBePrivate")
@@ -47,6 +47,7 @@ class Drawing(override val defNode: Node = Node(), val rootNode: Group = Group(d
         rootNode.paint.alpha = alpha
     }
 
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
 
     override fun setColorFilter(colorFilter: ColorFilter?) {
@@ -72,6 +73,4 @@ class Drawing(override val defNode: Node = Node(), val rootNode: Group = Group(d
         rootNode.paint(init)
         filled = true
     }
-
-
 }
