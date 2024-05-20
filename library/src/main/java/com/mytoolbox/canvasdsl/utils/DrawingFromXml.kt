@@ -1,11 +1,8 @@
 package com.mytoolbox.canvasdsl.utils
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.Path
 import com.mytoolbox.canvasdsl.common.dp
-import com.mytoolbox.canvasdsl.drawing
 import com.mytoolbox.canvasdsl.primitives.Group
 import com.mytoolbox.canvasdsl.primitives.group
 import com.mytoolbox.canvasdsl.primitives.path
@@ -14,34 +11,43 @@ import com.mytoolbox.canvasdsl.utils.parser.pathFromString
 import org.xmlpull.v1.XmlPullParser
 import java.util.*
 
-fun Context.drawingFromXml(resId: Int) = drawing {
+context(Context)
+fun Group.groupFromXml(resId: Int, block: (Group.() -> Unit)? = null) = this.group {
     val xpp = resources.getXml(resId)
     val groups = Stack<Group>()
+    var alpha = 0
     var attrPos: Int
     var attrVal: String
+    var iWidth = 0
+    var iHeight = 0
+    var vWidth = 0f
+    var vHeight = 0f
+    var kX: Float = 1f
+    var kY: Float = 1f
+
     while (xpp.eventType != XmlPullParser.END_DOCUMENT) {
         when (xpp.eventType) {
             XmlPullParser.START_TAG -> {
                 when (xpp.name) {
                     "vector" -> {
-                        groups.push(rootNode)
-                        viewport {
-                            attrPos = xpp.getAttrPosition("viewportWidth")
-                            if (attrPos != -1)
-                                width = xpp.getAttributeValue(attrPos).toFloat()
-                            attrPos = xpp.getAttrPosition("viewportHeight")
-                            if (attrPos != -1)
-                                height = xpp.getAttributeValue(attrPos).toFloat()
-                        }
+                        groups.push(this)
+
+                        attrPos = xpp.getAttrPosition("viewportWidth")
+                        if (attrPos != -1)
+                            vWidth = xpp.getAttributeValue(attrPos).toFloat()
+                        attrPos = xpp.getAttrPosition("viewportHeight")
+                        if (attrPos != -1)
+                            vHeight = xpp.getAttributeValue(attrPos).toFloat()
 
                         attrPos = xpp.getAttrPosition("alpha")
+
                         if (attrPos != -1)
                             alpha = (xpp.getAttributeValue(attrPos).toFloat() * 255.0f).toInt()
 
                         attrPos = xpp.getAttrPosition("width")
                         if (attrPos != -1) {
                             attrVal = xpp.getAttributeValue(attrPos)
-                            width = if (attrVal.contains("dip") || attrVal.contains("dp"))
+                            iWidth = if (attrVal.contains("dip") || attrVal.contains("dp"))
                                 Utils.getFloatFromDimensionString(attrVal).dp.toInt()
                             else
                                 Utils.getFloatFromDimensionString(attrVal).toInt()
@@ -50,25 +56,28 @@ fun Context.drawingFromXml(resId: Int) = drawing {
                         attrPos = xpp.getAttrPosition("height")
                         if (attrPos != -1) {
                             attrVal = xpp.getAttributeValue(attrPos)
-                            height = if (attrVal.contains("dip") || attrVal.contains("dp"))
+                            iHeight = if (attrVal.contains("dip") || attrVal.contains("dp"))
                                 Utils.getFloatFromDimensionString(attrVal).dp.toInt()
                             else
                                 Utils.getFloatFromDimensionString(attrVal).toInt()
                         }
+                        kX = iWidth / vWidth
+                        kY = iHeight / vHeight
 
-                        if (height == 0 || width == 0)
-                            fitToHost = true
+                     //   scale(iWidth / vWidth, iHeight / vHeight)
                     }
 
                     "group" -> {
                         groups.peek().group {
+                            groups.push(this)
                             attrPos = xpp.getAttrPosition("name")
                             if (attrPos != -1)
                                 id = xpp.getAttributeValue(attrPos)
 
+                            var a = 0f
                             attrPos = xpp.getAttrPosition("rotation")
                             if (attrPos != -1)
-                                rotate(xpp.getAttributeValue(attrPos).toFloat())
+                                a = xpp.getAttributeValue(attrPos).toFloat()
 
                             var sx = 1f
                             var sy = 1f
@@ -80,8 +89,6 @@ fun Context.drawingFromXml(resId: Int) = drawing {
                             attrPos = xpp.getAttrPosition("scaleY")
                             if (attrPos != -1)
                                 sy = xpp.getAttributeValue(attrPos).toFloat()
-
-                            scale(sx, sy)
 
                             var px = 0f
                             var py = 0f
@@ -103,90 +110,110 @@ fun Context.drawingFromXml(resId: Int) = drawing {
                                 tx = xpp.getAttributeValue(attrPos).toFloat()
 
                             attrPos = xpp.getAttrPosition("translateY")
+
                             if (attrPos != -1)
                                 ty = xpp.getAttributeValue(attrPos).toFloat()
 
-                            relative {
-                                pivot(px.vpX, py.vpY)
-                                translate(tx.vpX, ty.vpY)
-                            }
+                            pivot(px, py)
+                            translate(tx* kX, ty * kY)
+                            rotate(a)
+                            scale(sx, sy)
 
                             groups.push(this)
                         }
-
                     }
 
                     "clip-path" -> {
                         attrPos = xpp.getAttrPosition("pathData")
                         if (attrPos != -1)
                             groups.peek().clipPath {
-                                groups.peek().relative {
-                                    pathFromString(this@clipPath, xpp.getAttributeValue(attrPos))
-                                }
+                                this@clipPath.addPath(pathFromString(xpp.getAttributeValue(attrPos), kX, kY))
                             }
                     }
 
                     "path" -> {
                         var hasStroke = false
                         val strokePaint = Paint().apply {
+                            style = Paint.Style.STROKE
                             attrPos = xpp.getAttrPosition("strokeAlpha")
-                            alpha =  (xpp.getAttributeValue(attrPos).toFloat() * 255.0).toInt()
-                            attrPos = xpp.getAttrPosition("strokeColor")
-                            color = Utils.getColorFromString(xpp.getAttributeValue(attrPos))
-                            attrPos = xpp.getAttrPosition("strokeLineCap")
-                            strokeCap = Utils.getLineCapFromString(xpp.getAttributeValue(attrPos))
-                            attrPos = xpp.getAttrPosition("strokeLineJoin")
-                            strokeJoin = Utils.getLineJoinFromString(xpp.getAttributeValue(attrPos))
-                            attrPos = xpp.getAttrPosition("strokeMiterLimit")
-                            strokeMiter = xpp.getAttributeValue(attrPos).toFloat()
-                            attrPos = xpp.getAttrPosition("strokeWidth")
-                            strokeWidth = xpp.getAttributeValue(attrPos).toFloat()
-                        }
-
-                        val fillPaint = Paint().apply {
-                            attrPos = xpp.getAttrPosition("fillAlpha")
-                            //Float.parseFloat(xpp.getAttributeValue(attrPos))
-                            attrPos = xpp.getAttrPosition("fillColor");
-                            // Utils.getColorFromString(xpp.getAttributeValue(attrPos))
-                            attrPos = xpp.getAttrPosition("fillType");
-                            //Utils.getFillTypeFromString(xpp.getAttributeValue(attrPos))
-
-                        }
-
-                        attrPos = xpp.getAttrPosition("trimPathEnd");
-                        //Float.parseFloat(xpp.getAttributeValue(attrPos))
-                        attrPos = xpp.getAttrPosition("trimPathOffset")
-                        //Float.parseFloat(xpp.getAttributeValue(attrPos))
-                        attrPos = xpp.getAttrPosition("trimPathStart")
-                        //Float.parseFloat(xpp.getAttributeValue(attrPos))
-
-                        val p = Path()
-
-                        groups.peek().path {
-                            attrPos = xpp.getAttrPosition("name")
-
-                            if (attrPos != -1)
-                                id = xpp.getAttributeValue(attrPos) + "_fill"
-
-                            paint = fillPaint
-
-                            attrPos = xpp.getAttrPosition("pathData")
                             if (attrPos != -1) {
-                                relative {
-                                    pathFromString(p, xpp.getAttributeValue(attrPos));
-                                }
-                                path = p
+                                alpha = (xpp.getAttributeValue(attrPos).toFloat() * 255.0).toInt()
+                                hasStroke = true
+                            }
+                            attrPos = xpp.getAttrPosition("strokeColor")
+                            if (attrPos != -1) {
+                                color = Utils.getColorFromString(xpp.getAttributeValue(attrPos))
+                            }
+                            attrPos = xpp.getAttrPosition("strokeLineCap")
+                            if (attrPos != -1) {
+                                strokeCap = Utils.getLineCapFromString(xpp.getAttributeValue(attrPos))
+                            }
+                            attrPos = xpp.getAttrPosition("strokeLineJoin")
+                            if (attrPos != -1) {
+                                strokeJoin = Utils.getLineJoinFromString(xpp.getAttributeValue(attrPos))
+                            }
+                            attrPos = xpp.getAttrPosition("strokeMiterLimit")
+                            if (attrPos != -1) {
+                                strokeMiter = xpp.getAttributeValue(attrPos).toFloat()
+                            }
+                            attrPos = xpp.getAttrPosition("strokeWidth")
+                            if (attrPos != -1) {
+                                strokeWidth = xpp.getAttributeValue(attrPos).toFloat()
                             }
                         }
-                        if (!p.isEmpty)
-                            groups.peek().path {
-                                attrPos = xpp.getAttrPosition("name")
 
-                                if (attrPos != -1)
-                                    id = xpp.getAttributeValue(attrPos) + "_stroke"
+                        var hasFill = false
+                        val fillPaint = Paint().apply {
+                            style = Paint.Style.FILL
+                            attrPos = xpp.getAttrPosition("fillAlpha")
+                            if (attrPos != -1) {
+                                alpha = (xpp.getAttributeValue(attrPos).toFloat() * 255.0).toInt()
+                                hasFill = true
+                            }
+                            attrPos = xpp.getAttrPosition("fillColor")
+                            if (attrPos != -1) {
+                                color = Utils.getColorFromString(xpp.getAttributeValue(attrPos))
+                                hasFill = true
+                            }
+                            attrPos = xpp.getAttrPosition("fillType")
+                            if (attrPos != -1) {
+                                Utils.getFillTypeFromString(xpp.getAttributeValue(attrPos))
+                                hasFill = true
+                            }
 
-                                paint = strokePaint
-                                path = p
+                        }
+
+                        var data: String? = null
+                        attrPos = xpp.getAttrPosition("pathData")
+                        if (attrPos != -1)
+                            data = xpp.getAttributeValue(attrPos)
+
+                        var name: String? = null
+                        attrPos = xpp.getAttrPosition("name")
+                        if (attrPos != -1)
+                            name = xpp.getAttributeValue(attrPos)
+
+                        if (data != null)
+                            groups.peek().group {
+                                if (name != null)
+                                    id = name
+
+                                groups.push(this)
+                                if (hasFill) {
+                                    path {
+                                        id = groups.peek().id + "_fill"
+                                        path = pathFromString(data, kX, kY)
+                                        paint = fillPaint
+                                    }
+                                }
+
+                                if (hasStroke) {
+                                    path {
+                                        id = groups.peek().id + "_stroke"
+                                        path = pathFromString(data, kX, kY)
+                                        paint = strokePaint
+                                    }
+                                }
                             }
                     }
                 }
@@ -194,19 +221,16 @@ fun Context.drawingFromXml(resId: Int) = drawing {
 
             XmlPullParser.END_TAG -> {
                 when (xpp.name) {
-                    "vector" -> {
-                    }
-                    "group" -> groups.pop()
-                    "clip-path" -> {
-                    }
-                    "path" -> {
-                    }
+                    "vector", "group", "path" -> groups.pop()
+                    "clip-path" -> {}
                 }
             }
         }
 
         xpp.next()
     }
+
+    block?.invoke(this)
 }
 
 private fun XmlPullParser.getAttrPosition(attrName: String): Int {

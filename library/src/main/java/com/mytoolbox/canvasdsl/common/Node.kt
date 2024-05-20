@@ -11,7 +11,9 @@ open class Node : ViewportGuest {
     protected var scale = PointF(1f, 1f)
     protected var clipRegion = Path()
     protected var viewportFun: (Viewport.() -> Unit)? = null
-    protected var children = mutableListOf<Node>()
+    protected var mutableChildren = mutableListOf<Node>()
+
+    val children: List<Node> get() = mutableChildren
 
     var paint: Paint = Paint()
     var id = ""
@@ -33,10 +35,10 @@ open class Node : ViewportGuest {
 
     override fun initViewport(viewport: Viewport) {
         viewportFun?.invoke(viewport)
-        children.forEach { it.initViewport(viewport) }
+        mutableChildren.forEach { it.initViewport(viewport) }
     }
 
-    open fun drawSelf(canvas: Canvas){}
+    open fun drawSelf(canvas: Canvas) {}
 
     fun paint(init: Paint.() -> Unit): Paint = paint.apply { init() }
 
@@ -46,8 +48,8 @@ open class Node : ViewportGuest {
     }
 
     fun pivot(x: Float, y: Float) {
-        this.pos.x = x
-        this.pos.y = y
+        this.pivot.x = x
+        this.pivot.y = y
     }
 
     fun rotate(degree: Float) {
@@ -77,17 +79,17 @@ open class Node : ViewportGuest {
     }
 
     fun addChild(node: Node) {
-        children.withIndex().find { it.value.id == node.id }?.let {
-            children[it.index].removeAll()
-            children[it.index] = node
+        mutableChildren.withIndex().find { it.value.id == node.id }?.let {
+            mutableChildren[it.index].removeAll()
+            mutableChildren[it.index] = node
         } ?: run {
-            children.add(node)
+            mutableChildren.add(node)
         }
     }
 
     fun removeAll() {
-        children.forEach { it.removeAll() }
-        children.clear()
+        mutableChildren.forEach { it.removeAll() }
+        mutableChildren.clear()
     }
 
     fun <T : Node> nodeById(id: String): T =
@@ -98,7 +100,7 @@ open class Node : ViewportGuest {
         if (this.id == id)
             return this as T
 
-        children.forEach {
+        mutableChildren.forEach {
             it.findChild<T>(id)?.let { res -> return res }
         }
 

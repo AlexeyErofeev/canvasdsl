@@ -7,11 +7,11 @@ import com.mytoolbox.canvasdsl.primitives.Def
 import com.mytoolbox.canvasdsl.primitives.Group
 import com.mytoolbox.canvasdsl.common.*
 
-@Suppress("unused", "UnusedReceiverParameter")
-fun Context.drawing(init: Drawing.() -> Unit): Lazy<Drawing> = lazy { Drawing().apply(init) }
+@Suppress("unused")
+fun Context.drawing(init: Drawing.() -> Unit): Lazy<Drawing> = lazy { Drawing(context = this).apply(init) }
 
 @Suppress("unused", "MemberVisibilityCanBePrivate")
-class Drawing(override val defNode: Node = Node(), val rootNode: Group = Group(defNode).apply { id = "root" }) : Drawable(),
+class Drawing(val context: Context, override val defNode: Node = Node(), val rootNode: Group = Group(defNode).apply { id = "root" }) : Drawable(),
     NodeFabric by rootNode, ViewportHost {
     override var width: Int = 0
     override var height: Int = 0

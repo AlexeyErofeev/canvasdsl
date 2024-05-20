@@ -6,7 +6,8 @@ import android.util.Log
 import com.mytoolbox.canvasdsl.common.Viewport
 import kotlin.math.*
 
-fun Viewport.pathFromString(p: Path, s: String) {
+fun pathFromString(s: String, kX: Float, kY: Float): Path {
+    val p = Path()
     val n = s.length
     val ph = ParserHelper(s)
     ph.skipWhitespace()
@@ -37,8 +38,8 @@ fun Viewport.pathFromString(p: Path, s: String) {
         var wasCurve = false
         when (cmd) {
             'M', 'm' -> {
-                val x = ph.nextFloat().vpX
-                val y = ph.nextFloat().vpY
+                val x = ph.nextFloat() * kX //.vpX
+                val y = ph.nextFloat() * kY //.vpY
                 if (cmd == 'm') {
                     p.rMoveTo(x, y)
                     lastX += x
@@ -51,6 +52,7 @@ fun Viewport.pathFromString(p: Path, s: String) {
                 contourInitialX = lastX
                 contourInitialY = lastY
             }
+
             'Z', 'z' -> {
 
                 /// p.lineTo(contourInitialX, contourInitialY);
@@ -58,9 +60,10 @@ fun Viewport.pathFromString(p: Path, s: String) {
                 lastX = contourInitialX
                 lastY = contourInitialY
             }
+
             'L', 'l' -> {
-                val x = ph.nextFloat().vpX
-                val y = ph.nextFloat().vpY
+                val x = ph.nextFloat() * kX //.vpX
+                val y = ph.nextFloat() * kY //.vpY
                 if (cmd == 'l') {
                     if ((prevCmd == 'M' || prevCmd == 'm') && x == 0f && y == 0f) {
                         p.addCircle(x, y, 1f, Path.Direction.CW)
@@ -79,8 +82,9 @@ fun Viewport.pathFromString(p: Path, s: String) {
                     }
                 }
             }
+
             'H', 'h' -> {
-                val x = ph.nextFloat().vpX
+                val x = ph.nextFloat() * kX//.vpX
                 if (cmd == 'h') {
                     p.rLineTo(x, 0f)
                     lastX += x
@@ -89,8 +93,9 @@ fun Viewport.pathFromString(p: Path, s: String) {
                     lastX = x
                 }
             }
+
             'V', 'v' -> {
-                val y = ph.nextFloat().vpY
+                val y = ph.nextFloat() * kX //.vpY
                 if (cmd == 'v') {
                     p.rLineTo(0f, y)
                     lastY += y
@@ -99,14 +104,15 @@ fun Viewport.pathFromString(p: Path, s: String) {
                     lastY = y
                 }
             }
+
             'C', 'c' -> {
                 wasCurve = true
-                var x1 = ph.nextFloat().vpX
-                var y1 = ph.nextFloat().vpY
-                var x2 = ph.nextFloat().vpX
-                var y2 = ph.nextFloat().vpY
-                var x = ph.nextFloat().vpX
-                var y = ph.nextFloat().vpY
+                var x1 = ph.nextFloat() * kX //.vpX
+                var y1 = ph.nextFloat() * kY //.vpY
+                var x2 = ph.nextFloat() * kX //.vpX
+                var y2 = ph.nextFloat() * kY //.vpY
+                var x = ph.nextFloat() * kX //.vpX
+                var y = ph.nextFloat() * kY //.vpY
                 if (cmd == 'c') {
                     x1 += lastX
                     x2 += lastX
@@ -121,12 +127,13 @@ fun Viewport.pathFromString(p: Path, s: String) {
                 lastX = x
                 lastY = y
             }
+
             'S', 's' -> {
                 wasCurve = true
-                var x2 = ph.nextFloat().vpX
-                var y2 = ph.nextFloat().vpY
-                var x = ph.nextFloat().vpX
-                var y = ph.nextFloat().vpY
+                var x2 = ph.nextFloat() * kX//.vpX
+                var y2 = ph.nextFloat() * kY //.vpY
+                var x = ph.nextFloat() * kX //.vpX
+                var y = ph.nextFloat() * kY //.vpY
                 if (cmd == 's') {
                     x2 += lastX
                     x += lastX
@@ -141,14 +148,15 @@ fun Viewport.pathFromString(p: Path, s: String) {
                 lastX = x
                 lastY = y
             }
+
             'A', 'a' -> {
-                val rx = ph.nextFloat().vpX
-                val ry = ph.nextFloat().vpY
+                val rx = ph.nextFloat() * kX //.vpX
+                val ry = ph.nextFloat() * kY //.vpY
                 val theta = ph.nextFloat()
                 val largeArc = ph.nextFloat().toInt()
                 val sweepArc = ph.nextFloat().toInt()
-                var x = ph.nextFloat().vpX
-                var y = ph.nextFloat().vpY
+                var x = ph.nextFloat() * kX //.vpX
+                var y = ph.nextFloat() * kY //.vpY
                 if (cmd == 'a') {
                     x += lastX
                     y += lastY
@@ -168,10 +176,11 @@ fun Viewport.pathFromString(p: Path, s: String) {
                 lastX = x
                 lastY = y
             }
+
             'T', 't' -> {
                 wasCurve = true
-                var x = ph.nextFloat().vpX
-                var y = ph.nextFloat().vpY
+                var x = ph.nextFloat() * kX //.vpX
+                var y = ph.nextFloat() * kY //.vpY
                 if (cmd == 't') {
                     x += lastX
                     y += lastY
@@ -184,12 +193,13 @@ fun Viewport.pathFromString(p: Path, s: String) {
                 lastX1 = x1
                 lastY1 = y1
             }
+
             'Q', 'q' -> {
                 wasCurve = true
-                var x1 = ph.nextFloat().vpX
-                var y1 = ph.nextFloat().vpY
-                var x = ph.nextFloat().vpX
-                var y = ph.nextFloat().vpY
+                var x1 = ph.nextFloat() * kX //.vpX
+                var y1 = ph.nextFloat() * kY //.vpY
+                var x = ph.nextFloat() * kX //.vpX
+                var y = ph.nextFloat() * kY//.vpY
                 if (cmd == 'q') {
                     x += lastX
                     y += lastY
@@ -202,6 +212,7 @@ fun Viewport.pathFromString(p: Path, s: String) {
                 lastX = x
                 lastY = y
             }
+
             else -> {
                 ph.advance()
             }
@@ -213,6 +224,8 @@ fun Viewport.pathFromString(p: Path, s: String) {
         }
         ph.skipWhitespace()
     }
+
+    return p
 }
 
 /*

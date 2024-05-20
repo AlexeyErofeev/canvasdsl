@@ -19,6 +19,6 @@ open class Group(override val defNode: Node) : Node(), NodeFabric {
     }
 
     override fun drawSelf(canvas: Canvas) {
-        children.forEach { it.draw(canvas) }
+        mutableChildren.forEach { it.draw(canvas) }
     }
 }
