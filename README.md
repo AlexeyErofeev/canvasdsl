@@ -26,6 +26,8 @@ Inspired by [VectorMaster](https://github.com/harjot-oberai/VectorMaster) and va
 * Bitmap decoration
 * Animate on canvas
 
+![gif image](https://github.com/AlexeyErofeev/canvasdsl/blob/master/example.gif)
+
 ## Usage
 
 Add it in your root build.gradle at the end of repositories:
