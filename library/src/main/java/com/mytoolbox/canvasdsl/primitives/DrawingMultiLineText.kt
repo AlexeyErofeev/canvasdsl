@@ -16,18 +16,18 @@ import com.mytoolbox.canvasdsl.common.Viewport
  * Tag to draw multiline text.
  *
  * Differences from [text]:
- *  * breaks text in several lines if it doesn't fit (see [MultiLineText.alignment] for align text)
+ *  * breaks text in several lines if it doesn't fit (see [DrawingMultiLineText.alignment] for align text)
  *  * support `\n` to break lines
  *  * [Node.paint] could be [TextPaint]
- *  * doesn't support drawing with [Path]
+ *  * doesn't support drawing with [DrawingPath]
  *  * could be slower than [text] implementation
  */
 @Suppress("unused")
-fun NodeFabric.multiLineText(init: MultiLineText.() -> Unit) =
-    initNode(MultiLineText(), init)
+fun NodeFabric.multiLineText(init: DrawingMultiLineText.() -> Unit) =
+    initNode(DrawingMultiLineText(), init)
 
 @Suppress("MemberVisibilityCanBePrivate")
-class MultiLineText : Node() {
+class DrawingMultiLineText : Node() {
     private var resId = 0
     var text = ""
     var alignment: Layout.Alignment = Layout.Alignment.ALIGN_NORMAL

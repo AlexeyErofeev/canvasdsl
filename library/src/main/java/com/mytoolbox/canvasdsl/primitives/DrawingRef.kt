@@ -5,14 +5,14 @@ import com.mytoolbox.canvasdsl.common.Node
 import com.mytoolbox.canvasdsl.common.NodeFabric
 
 @Suppress("unused")
-fun NodeFabric.ref(tag: String, init: Ref.() -> Unit) =
-    initNode(Ref(defNode).apply { this.tag = tag }, init)
+fun NodeFabric.ref(tag: String, init: DrawingRef.() -> Unit) =
+    initNode(DrawingRef(defNode).apply { this.tag = tag }, init)
 
 @Suppress("unused")
-class Ref(private val defNode: Node) : Node() {
+class DrawingRef(private val defNode: Node) : Node() {
     var tag = ""
 
     override fun drawSelf(canvas: Canvas) {
-        defNode.nodeById<Def>(tag).drawSelf(canvas)
+        defNode.nodeById<DrawingDef>(tag).drawSelf(canvas)
     }
 }

@@ -3,15 +3,15 @@ package com.mytoolbox.canvasdsl
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
-import com.mytoolbox.canvasdsl.primitives.Def
-import com.mytoolbox.canvasdsl.primitives.Group
+import com.mytoolbox.canvasdsl.primitives.DrawingDef
+import com.mytoolbox.canvasdsl.primitives.DrawingGroup
 import com.mytoolbox.canvasdsl.common.*
 
 @Suppress("unused")
 fun Context.drawing(init: Drawing.() -> Unit): Lazy<Drawing> = lazy { Drawing(context = this).apply(init) }
 
 @Suppress("unused", "MemberVisibilityCanBePrivate")
-class Drawing(val context: Context, override val defNode: Node = Node(), val rootNode: Group = Group(defNode).apply { id = "root" }) : Drawable(),
+class Drawing(val context: Context, override val defNode: Node = Node(), val rootNode: DrawingGroup = DrawingGroup(defNode).apply { id = "root" }) : Drawable(),
     NodeFabric by rootNode, ViewportHost {
     override var width: Int = 0
     override var height: Int = 0
@@ -60,8 +60,8 @@ class Drawing(val context: Context, override val defNode: Node = Node(), val roo
     }
 
     // Own
-    fun define(tag: String = "", init: Def.() -> Unit): Def {
-        val def = Def(defNode)
+    fun define(tag: String = "", init: DrawingDef.() -> Unit): DrawingDef {
+        val def = DrawingDef(defNode)
         def.tag = tag
         def.init()
         defNode.addChild(def)

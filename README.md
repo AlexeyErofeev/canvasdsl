@@ -1,8 +1,10 @@
 [![](https://jitpack.io/v/AlexeyErofeev/canvasdsl.svg)](https://jitpack.io/#AlexeyErofeev/canvasdsl)
 
-# CanvasDSL
+# CanvasDSL 2
 
-Simple lightweight kotlin-dsl for canvas drawings.
+Simple lightweight kotlin-dsl for canvas drawings in old-style xml-layout apps (if you use compose you don't need it).
+
+Inspired by [VectorMaster](https://github.com/harjot-oberai/VectorMaster)
 
 ## Key features
 
@@ -13,13 +15,16 @@ Simple lightweight kotlin-dsl for canvas drawings.
 * Viewport mechanics with relative "viewport points"
 * No compatibility limits - works with minimum android sdk 1
 * One dependency: kotlin stdlib, you should use it anyway for kotlin
+* Using vector drawables as resource or convert in primitives
+* Using path from string (vector drawable pathData or svg pathData)
 
 ## Usecases
 
 * Charts
-* Determinate progress, charge indicators
-* Another simple data visualization 
+* Progress bars, charge indicators
+* Visualizations of constantly updated data
 * Bitmap decoration
+* Animate on canvas
 
 ## Usage
 
@@ -36,12 +41,12 @@ Add it in your root build.gradle at the end of repositories:
 
 Add the dependency:
 ```groovy
-
 	dependencies {
-	        implementation 'com.github.AlexeyErofeev:canvasdsl:1.0.4'
+	        implementation 'com.github.AlexeyErofeev:canvasdsl:2.0'
 	}
 ```
-
-## Example
-Included example contains chart bar for stress level for last completed 7 days, which shows how to use main primitives and measures except "path"
-![Included example screenshot](https://github.com/AlexeyErofeev/canvasdsl/blob/master/ex1.jpg?raw=true)
+See 
+[example](https://github.com/AlexeyErofeev/canvasdsl/blob/master/example/src/main/java/com/mytoolbox/canvasdsl/example/MainActivity.kt) 
+to learn how to draw using this library
+And also see full [primitives list](https://github.com/AlexeyErofeev/canvasdsl/blob/master/library/src/main/java/com/mytoolbox/canvasdsl/primitives) and
+[useful utils](https://github.com/AlexeyErofeev/canvasdsl/blob/master/library/src/main/java/com/mytoolbox/canvasdsl/utils).

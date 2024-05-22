@@ -4,7 +4,7 @@ import com.mytoolbox.canvasdsl.common.Node
 
 @Suppress("unused")
 
-class Def(defNode: Node) : Group(defNode) {
+class DrawingDef(defNode: Node) : DrawingGroup(defNode) {
     var tag
         get() = id
         set(tag) {

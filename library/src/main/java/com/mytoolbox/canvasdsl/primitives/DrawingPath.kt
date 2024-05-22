@@ -1,21 +1,17 @@
 package com.mytoolbox.canvasdsl.primitives
 
-import android.R.attr.*
-import android.annotation.SuppressLint
 import android.graphics.Canvas
 import android.graphics.Path
 import android.graphics.PathMeasure
 import com.mytoolbox.canvasdsl.common.Node
 import com.mytoolbox.canvasdsl.common.NodeFabric
-import com.mytoolbox.canvasdsl.primitives.Path as P
-
 
 @Suppress("unused")
-fun NodeFabric.path(init: P.() -> Unit) =
-    initNode(P(), init)
+fun NodeFabric.path(init: DrawingPath.() -> Unit) =
+    initNode(DrawingPath(), init)
 
 @Suppress("unused")
-class Path : Node() {
+class DrawingPath : Node() {
 
     var path = Path()
     private var trimmedPath = Path()

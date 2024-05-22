@@ -9,11 +9,11 @@ import com.mytoolbox.canvasdsl.common.SizeF
 import com.mytoolbox.canvasdsl.common.Viewport
 
 @Suppress("unused")
-fun NodeFabric.text(init: Text.() -> Unit) =
-    initNode(Text(defNode), init)
+fun NodeFabric.text(init: DrawingText.() -> Unit) =
+    initNode(DrawingText(defNode), init)
 
 @Suppress("unused", "MemberVisibilityCanBePrivate")
-class Text(private val defNode: Node) : Node() {
+class DrawingText(private val defNode: Node) : Node() {
     private var path: android.graphics.Path? = null
     private var resId = 0
     var text = ""
@@ -60,6 +60,6 @@ class Text(private val defNode: Node) : Node() {
 
     fun path(init: OnPath.() -> Unit) = with(onPath) {
         init()
-        path = defNode.nodeById<Path>(tag).path
+        path = defNode.nodeById<DrawingPath>(tag).path
     }
 }

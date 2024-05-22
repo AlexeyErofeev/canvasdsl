@@ -1,25 +1,13 @@
 package com.mytoolbox.canvasdsl.example
 
-
-import android.animation.ValueAnimator
-import android.graphics.Color
-import android.graphics.Paint
 import android.os.Bundle
-import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.mytoolbox.canvasdsl.common.dp
 import com.mytoolbox.canvasdsl.drawing
-import com.mytoolbox.canvasdsl.primitives.Group
+import com.mytoolbox.canvasdsl.example.elements.*
 import com.mytoolbox.canvasdsl.primitives.group
-
-import com.mytoolbox.canvasdsl.primitives.path
-import com.mytoolbox.canvasdsl.primitives.rect
-import com.mytoolbox.canvasdsl.primitives.Path as DPath
-
-import com.mytoolbox.canvasdsl.utils.groupFromXml
-
 import com.mytoolbox.example.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,42 +15,58 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
+
 class MainActivity : AppCompatActivity() {
+    // fill our drawing with primitives which render themselves in onDrawing
+    // drawing construction can work in any threadPool
     private val drawing by drawing {
         fitToHost = true
 
+        // viewport parameters as in svg
+        // let's take drawing viewport points as percents (viewport width and height are 1f by default)
+        // then you draw for example 24h chart you can take it in hours, or in minutes
+        viewport {
+            width = 100f
+            height = 100f
+        }
+
+        caption("Drawables") {
+            relative {
+                // 50.vpX is a center of drawing by x-axis, vpX/vpY is only available in "relative" section
+                // text is measurable, using "size" we can center it in drawing area
+                // it works like (screenWidth - elementWidth) / 2 or screenCenter - elementWidth / 2
+                translate(50.vpX - size.width / 2, (48.dp - size.height) / 2)
+            }
+        }
+
         group {
-            id = "root"
-            scale(15f, 15f)
+            relative { translate(50.vpX - 144.dp, 48.dp) }
+            // using scale we manipulate inner screen points without changes as on canvas
+            // here we have 2x so icons is 80x80 but inside we use own icon sizes 40x40
+            // but groupWidth in translation doubled for centering doubled group elements
+            scale(2f, 2f)
 
-            groupFromXml(R.drawable.week_arrow) {
-                id = "play_drawable"
-                pivot(2.5f.dp, 3.5f.dp)
-                translate(5.dp, 0f)
-                rotate(90f)
-                rect {
-                    translate(2.5f.dp, 3.5f.dp)
-                    width = 1f
-                    height = 1f
-                    paint { color = Color.BLACK }
-                }
-            }
+            heart() // convert drawable to primitives
+            sun { translateByX(48.dp) } // using as android drawable
+            ball { translateByX(96.dp) } // using as android drawable
+        }
 
-            group {
-                translate(15.dp, 0f)
-                rect {
-                    width = 5.dp
-                    height = 7.dp
-                    paint { color = Color.BLACK }
-                }
+        caption("Path") {
+            relative { translate(50.vpX - size.width / 2, 156.dp + (48.dp - size.height) / 2) }
+        }
 
-                rect {
-                    translate(2.5f.dp, 3.5f.dp)
-                    width = 1f
-                    height = 1f
-                    paint { color = Color.WHITE }
-                }
-            }
+        group {
+            relative { translate(50.vpX - 81.dp, 232.dp) }
+            infinity() // draw path from pathData
+        }
+
+        caption("Chart") {
+            relative { translate(50.vpX - size.width / 2, 340.dp + (48.dp - size.height) / 2) }
+        }
+
+        group {
+            relative { translate(50.vpX - 83.dp, 400.dp) }
+            chart() // draw boxes
         }
     }
 
@@ -88,62 +92,15 @@ class MainActivity : AppCompatActivity() {
         image.setImageDrawable(drawing)
     }
 
-
     override fun onResume() {
         super.onResume()
-        val playGroup = drawing.rootNode.nodeById<Group>("play")
-        val fillPath = drawing.rootNode.nodeById<DPath>("play_fill")
-        var strokePath1: DPath? = null
-        var strokePath2: DPath? = null
 
-        playGroup.apply {
-            path {
-                strokePath1 = this
-                id = "play_stroke1"
-                path = fillPath.path
-                paint {
-                    style = Paint.Style.STROKE
-                    strokeWidth = 1f
-                    strokeCap = Paint.Cap.ROUND
-                }
-            }
-
-            path {
-                strokePath2 = this@path
-                id = "play_stroke2"
-                path = fillPath.path
-                paint {
-                    style = Paint.Style.STROKE
-                    strokeWidth = 1f
-                    strokeCap = Paint.Cap.ROUND
-                }
-            }
+        drawing.apply {
+            animateHeart()
+            animateSun()
+            animateBall()
+            animateInfinity()
+            animateChart()
         }
-
-        endlessAnimate {
-            strokePath1?.trimPath(
-                0f,
-                .5f,
-                it
-            )
-
-            strokePath2?.trimPath(
-                0f,
-                .5f,
-                it - 1f
-            )
-        }
-    }
-
-    private fun endlessAnimate(block: (animationValue: Float) -> Unit) = apply {
-        val animator = ValueAnimator.ofFloat(0f, 1f)
-        animator.duration = 1000
-        animator.repeatCount = ValueAnimator.INFINITE
-        animator.interpolator = LinearInterpolator()
-        animator.addUpdateListener {
-            block(it.animatedValue as Float)
-            drawing.invalidateSelf()
-        }
-        animator.start()
     }
 }

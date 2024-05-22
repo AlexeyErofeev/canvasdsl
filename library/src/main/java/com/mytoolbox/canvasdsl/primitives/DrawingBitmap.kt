@@ -9,12 +9,12 @@ import com.mytoolbox.canvasdsl.common.NodeFabric
 import com.mytoolbox.canvasdsl.common.renderDrawable
 
 @Suppress("unused")
-fun NodeFabric.bitmap(init: com.mytoolbox.canvasdsl.primitives.Bitmap.() -> Unit) =
-    initNode(Bitmap(), init)
+fun NodeFabric.bitmap(init: DrawingBitmap.() -> Unit) =
+    initNode(DrawingBitmap(), init)
 
 
 @Suppress("MemberVisibilityCanBePrivate")
-class Bitmap: Node() {
+class DrawingBitmap: Node() {
     private var resId: Int = 0
 
     var bitmap: Bitmap? = null
@@ -29,7 +29,7 @@ class Bitmap: Node() {
     var Context.res: Int
         get() = resId
         set(resId) {
-            this@Bitmap.resId = resId
+            this@DrawingBitmap.resId = resId
             bitmap = renderDrawable(resId, width?.toInt(), height?.toInt())
         }
 }

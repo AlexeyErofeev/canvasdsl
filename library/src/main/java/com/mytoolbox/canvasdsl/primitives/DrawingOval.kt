@@ -7,10 +7,10 @@ import com.mytoolbox.canvasdsl.common.NodeFabric
 
 @Suppress("unused")
 
-fun NodeFabric.oval(init: Oval.() -> Unit) =
-    initNode(Oval(), init)
+fun NodeFabric.oval(init: DrawingOval.() -> Unit) =
+    initNode(DrawingOval(), init)
 
-class Oval : Node() {
+class DrawingOval : Node() {
     private var rect: RectF = RectF(0f, 0f, 0f, 0f)
 
     var width: Float = 0f

@@ -5,12 +5,24 @@ import com.mytoolbox.canvasdsl.utils.newRoundedRect
 
 @Suppress("unused", "MemberVisibilityCanBePrivate")
 open class Node : ViewportGuest {
-    protected var pivot = PointF(0f, 0f)
-    protected var pos = PointF(0f, 0f)
-    protected var angle = 0f
-    protected var scale = PointF(1f, 1f)
-    protected var clipRegion = Path()
-    protected var viewportFun: (Viewport.() -> Unit)? = null
+    var pivot = PointF(0f, 0f)
+        protected set
+
+    var pos = PointF(0f, 0f)
+        protected  set
+
+    var angle = 0f
+        protected  set
+
+    var scale = PointF(1f, 1f)
+        protected  set
+
+    var clipRegion = Path()
+        protected  set
+
+    var viewportFun: (Viewport.() -> Unit)? = null
+        protected  set
+
     protected var mutableChildren = mutableListOf<Node>()
 
     val children: List<Node> get() = mutableChildren
@@ -44,6 +56,14 @@ open class Node : ViewportGuest {
 
     fun translate(x: Float, y: Float) {
         this.pos.x = x
+        this.pos.y = y
+    }
+
+    fun translateByX(x: Float) {
+        this.pos.x = x
+    }
+
+    fun translateY(y: Float) {
         this.pos.y = y
     }
 

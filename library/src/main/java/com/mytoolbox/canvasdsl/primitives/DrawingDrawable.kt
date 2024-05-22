@@ -9,11 +9,11 @@ import com.mytoolbox.canvasdsl.common.Node
 import com.mytoolbox.canvasdsl.common.NodeFabric
 
 @Suppress("unused")
-fun NodeFabric.drawable(init: com.mytoolbox.canvasdsl.primitives.Drawable.() -> Unit) =
-    initNode(com.mytoolbox.canvasdsl.primitives.Drawable(), init)
+fun NodeFabric.drawable(init: DrawingDrawable.() -> Unit) =
+    initNode(DrawingDrawable(), init)
 
 @Suppress("MemberVisibilityCanBePrivate")
-class Drawable : Node() {
+class DrawingDrawable : Node() {
     private var resId: Int = 0
 
     var drawable: Drawable? = null
@@ -26,7 +26,7 @@ class Drawable : Node() {
     var Context.res: Int
         get() = resId
         set(resId) {
-            this@Drawable.resId = resId
+            this@DrawingDrawable.resId = resId
 
             @Suppress("DEPRECATION")
             drawable = (

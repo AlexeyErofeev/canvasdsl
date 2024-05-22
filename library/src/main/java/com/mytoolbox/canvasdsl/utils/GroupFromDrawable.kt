@@ -3,7 +3,7 @@ package com.mytoolbox.canvasdsl.utils
 import android.content.Context
 import android.graphics.Paint
 import com.mytoolbox.canvasdsl.common.dp
-import com.mytoolbox.canvasdsl.primitives.Group
+import com.mytoolbox.canvasdsl.primitives.DrawingGroup
 import com.mytoolbox.canvasdsl.primitives.group
 import com.mytoolbox.canvasdsl.primitives.path
 import com.mytoolbox.canvasdsl.utils.parser.Utils
@@ -12,18 +12,21 @@ import org.xmlpull.v1.XmlPullParser
 import java.util.*
 
 context(Context)
-fun Group.groupFromXml(resId: Int, block: (Group.() -> Unit)? = null) = this.group {
+fun DrawingGroup.groupFromDrawable(resId: Int, block: (DrawingGroup.() -> Unit)? = null) = this.group {
     val xpp = resources.getXml(resId)
-    val groups = Stack<Group>()
-    var alpha = 0
+    val groups = Stack<DrawingGroup>()
+    var vectorAlpha = 0
     var attrPos: Int
     var attrVal: String
     var iWidth = 0
     var iHeight = 0
     var vWidth = 0f
     var vHeight = 0f
-    var kX: Float = 1f
-    var kY: Float = 1f
+    var kX = 1f
+    var kY = 1f
+    var trimPathEnd = 1f
+    var trimPathStart = 0f
+    var trimPathOffset = 0f
 
     while (xpp.eventType != XmlPullParser.END_DOCUMENT) {
         when (xpp.eventType) {
@@ -42,7 +45,7 @@ fun Group.groupFromXml(resId: Int, block: (Group.() -> Unit)? = null) = this.gro
                         attrPos = xpp.getAttrPosition("alpha")
 
                         if (attrPos != -1)
-                            alpha = (xpp.getAttributeValue(attrPos).toFloat() * 255.0f).toInt()
+                            vectorAlpha = (xpp.getAttributeValue(attrPos).toFloat() * 255.0f).toInt()
 
                         attrPos = xpp.getAttrPosition("width")
                         if (attrPos != -1) {
@@ -64,7 +67,9 @@ fun Group.groupFromXml(resId: Int, block: (Group.() -> Unit)? = null) = this.gro
                         kX = iWidth / vWidth
                         kY = iHeight / vHeight
 
-                     //   scale(iWidth / vWidth, iHeight / vHeight)
+                        paint {
+                            alpha = vectorAlpha
+                        }
                     }
 
                     "group" -> {
@@ -115,7 +120,7 @@ fun Group.groupFromXml(resId: Int, block: (Group.() -> Unit)? = null) = this.gro
                                 ty = xpp.getAttributeValue(attrPos).toFloat()
 
                             pivot(px, py)
-                            translate(tx* kX, ty * kY)
+                            translate(tx * kX, ty * kY)
                             rotate(a)
                             scale(sx, sy)
 
@@ -162,6 +167,18 @@ fun Group.groupFromXml(resId: Int, block: (Group.() -> Unit)? = null) = this.gro
                             }
                         }
 
+                        attrPos = xpp.getAttrPosition("trimPathEnd")
+                        if (attrPos != -1)
+                            trimPathEnd = xpp.getAttributeValue(attrPos).toFloat()
+
+                        attrPos = xpp.getAttrPosition("trimPathOffset")
+                        if (attrPos != -1)
+                            trimPathOffset = xpp.getAttributeValue(attrPos).toFloat()
+
+                        attrPos = xpp.getAttrPosition("trimPathStart")
+                        if (attrPos != -1)
+                            trimPathStart = xpp.getAttributeValue(attrPos).toFloat()
+
                         var hasFill = false
                         val fillPaint = Paint().apply {
                             style = Paint.Style.FILL
@@ -204,6 +221,9 @@ fun Group.groupFromXml(resId: Int, block: (Group.() -> Unit)? = null) = this.gro
                                         id = groups.peek().id + "_fill"
                                         path = pathFromString(data, kX, kY)
                                         paint = fillPaint
+
+                                        if (trimPathOffset != 0f || trimPathEnd != 1f || trimPathStart != 0f)
+                                            trimPath(trimPathStart, trimPathEnd, trimPathOffset)
                                     }
                                 }
 
@@ -212,6 +232,9 @@ fun Group.groupFromXml(resId: Int, block: (Group.() -> Unit)? = null) = this.gro
                                         id = groups.peek().id + "_stroke"
                                         path = pathFromString(data, kX, kY)
                                         paint = strokePaint
+
+                                        if (trimPathOffset != 0f || trimPathEnd != 1f || trimPathStart != 0f)
+                                            trimPath(trimPathStart, trimPathEnd, trimPathOffset)
                                     }
                                 }
                             }
@@ -237,5 +260,5 @@ private fun XmlPullParser.getAttrPosition(attrName: String): Int {
     for (i: Int in 0 until attributeCount)
         if (getAttributeName(i) == attrName) return i
 
-    return -1;
+    return -1
 }

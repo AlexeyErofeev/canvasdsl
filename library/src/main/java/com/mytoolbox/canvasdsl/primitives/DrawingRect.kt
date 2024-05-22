@@ -10,13 +10,23 @@ import com.mytoolbox.canvasdsl.common.Viewport
 import com.mytoolbox.canvasdsl.utils.newRoundedRect
 
 @Suppress("unused")
-fun NodeFabric.rect(init: Rect.() -> Unit) =
-    initNode(Rect(), init)
+fun NodeFabric.rect(init: DrawingRect.() -> Unit) =
+    initNode(DrawingRect(), init)
 
 @Suppress("unused")
-class Rect : Node() {
+class DrawingRect : Node() {
     var width: Float = 0f
     var height: Float = 0f
+        set(value) {
+            field = value
+            if (roundedCorners)
+                with(rounded) {
+                    path = newRoundedRect(
+                        0f, 0f, width, height,
+                        rx, ry, topLeft, topRight, bottomRight, bottomLeft
+                    )
+                }
+        }
 
     private var roundedCorners = false
     private lateinit var path: Path
