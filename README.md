@@ -55,4 +55,4 @@ See
 to learn how to draw using this library,
 and also see full [primitives list](https://github.com/AlexeyErofeev/canvasdsl/blob/master/library/src/main/java/com/mytoolbox/canvasdsl/primitives) and 
 [useful utils](https://github.com/AlexeyErofeev/canvasdsl/blob/master/library/src/main/java/com/mytoolbox/canvasdsl/utils) and
-[useful utils](https://github.com/AlexeyErofeev/canvasdsl/blob/master/library/src/main/java/com/mytoolbox/canvasdsl/common/Extensions.kt).
+[extensions](https://github.com/AlexeyErofeev/canvasdsl/blob/master/library/src/main/java/com/mytoolbox/canvasdsl/common/Extensions.kt).
