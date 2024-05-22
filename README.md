@@ -2,9 +2,9 @@
 
 # CanvasDSL 2
 
-Simple lightweight kotlin-dsl for canvas drawings in old-style xml-layout apps (if you use compose you don't need it).
+Simple lightweight kotlin-dsl for canvas drawings in old-style xml-layout apps (if you draw on canvas with compose you don't need it).
 
-Inspired by [VectorMaster](https://github.com/harjot-oberai/VectorMaster)
+Inspired by [VectorMaster](https://github.com/harjot-oberai/VectorMaster) and various kotlin DSL-s. Used in production to visualize fitness tracker measures.
 
 ## Key features
 
@@ -45,8 +45,14 @@ Add the dependency:
 	        implementation 'com.github.AlexeyErofeev:canvasdsl:2.0'
 	}
 ```
+`groupFromDrawing` needs kotlin context receivers to use `Context`, so use in your `kotlinOptions`:
+```groovy
+    freeCompilerArgs = ["-Xcontext-receivers"]
+```
+
 See 
 [example](https://github.com/AlexeyErofeev/canvasdsl/blob/master/example/src/main/java/com/mytoolbox/canvasdsl/example/MainActivity.kt) 
-to learn how to draw using this library
-And also see full [primitives list](https://github.com/AlexeyErofeev/canvasdsl/blob/master/library/src/main/java/com/mytoolbox/canvasdsl/primitives) and
-[useful utils](https://github.com/AlexeyErofeev/canvasdsl/blob/master/library/src/main/java/com/mytoolbox/canvasdsl/utils).
+to learn how to draw using this library,
+and also see full [primitives list](https://github.com/AlexeyErofeev/canvasdsl/blob/master/library/src/main/java/com/mytoolbox/canvasdsl/primitives) and 
+[useful utils](https://github.com/AlexeyErofeev/canvasdsl/blob/master/library/src/main/java/com/mytoolbox/canvasdsl/utils) and
+[useful utils](https://github.com/AlexeyErofeev/canvasdsl/blob/master/library/src/main/java/com/mytoolbox/canvasdsl/common/Extensions.kt).
