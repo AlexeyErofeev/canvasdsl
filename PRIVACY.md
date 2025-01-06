@@ -1,0 +1,1 @@
+The Canvas DSL Example application does not collect personal information, store it, or share it with third parties. The application is created solely to demonstrate the use of the Canvas DSL library.

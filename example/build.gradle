@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 35
     namespace 'com.mytoolbox.example'
 
     defaultConfig {
         applicationId "com.mytoolbox.example"
         minSdkVersion 21
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode 5
         versionName "2.0"
 
@@ -41,7 +41,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.core:core-splashscreen:1.0.1'
 
     implementation project(':library')
